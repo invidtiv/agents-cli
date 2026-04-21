@@ -43,15 +43,8 @@ adk eval_set add_eval_case <agent_path> <eval_set_id> \
   --session_input_file session_input.json
 ```
 
-## Rollback (gcloud)
+## Rollback
 
-There is no `agents-cli rollback` command. Use `gcloud run services update-traffic` directly:
-
-```bash
-gcloud run services update-traffic SERVICE --to-revisions=R=100 --region=REGION
-```
-
-List available revisions:
-```bash
-gcloud run revisions list --service=SERVICE_NAME --region=REGION
-```
+Use the native rollback tooling for your deployment target — e.g.,
+`gcloud run services update-traffic` for Cloud Run, `kubectl rollout undo`
+for GKE, or the Agent Runtime console for Agent Runtime.

@@ -113,4 +113,5 @@ nav:
     - reference/index.md
     - CLI: cli/index.md
     - Skills: reference/skills.md
+    - About This Project: reference/about.md
     - From Agent Starter Pack: reference/from-agent-starter-pack.md

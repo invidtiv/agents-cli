@@ -48,7 +48,7 @@ agents-cli deploy --status  # Check deployment status
 
 ## Deployment Targets
 
-### Agent Engine
+### Agent Runtime
 
 Fully managed — no containers or infrastructure to manage:
 

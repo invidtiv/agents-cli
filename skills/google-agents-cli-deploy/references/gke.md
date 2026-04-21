@@ -42,7 +42,7 @@ This lets pods authenticate as `app_sa` without service account keys — same se
 |------|--------------|----------|
 | **In-memory** | Default (`session_service_uri = None`) | Local dev only; lost on pod restart |
 | **Cloud SQL** | `--session-type cloud_sql` at scaffold time | Production persistent sessions (Cloud SQL proxy sidecar in pod) |
-| **Agent Engine** | `session_service_uri = agentengine://{resource_name}` | When using Agent Engine as session backend |
+| **Agent Runtime** | `session_service_uri = agentengine://{resource_name}` | When using Agent Runtime as session backend |
 
 Cloud SQL in GKE uses a **proxy sidecar container** in the pod (unlike Cloud Run which uses a Unix socket volume mount). The sidecar is configured in the `kubernetes_deployment_v1` Terraform resource.
 

@@ -13,7 +13,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.5
+  version: 0.0.6
   requires:
     bins:
       - agents-cli
@@ -23,6 +23,15 @@ metadata:
 # ADK Observability Guide
 
 > **Cloud Trace** works out of the box — no infrastructure needed. **Prompt-response logging** and **BigQuery Agent Analytics** require Terraform-provisioned infrastructure (service account, GCS bucket, BigQuery dataset). Run `agents-cli infra single-project --project PROJECT_ID` to provision these resources. See `references/cloud-trace-and-logging.md` for details, env vars, and verification commands. If your project isn't scaffolded yet, see `/google-agents-cli-scaffold` first.
+
+### Order of operations for `agent_runtime` deployments
+
+For `deployment_target = agent_runtime`, run `agents-cli infra single-project` **before** the first `agents-cli deploy`. The Terraform module owns the entire Reasoning Engine resource (display_name, service account, deployment spec, env vars), so applying it after a SDK-based deploy creates a state mismatch — Terraform has no record of the SDK-deployed instance and cannot layer env vars onto it without taking ownership of the whole resource.
+
+If you have already run `agents-cli deploy`, you have two options:
+
+1. **Switch to Terraform-managed.** Delete the SDK-deployed Reasoning Engine, then run `agents-cli infra single-project` followed by `agents-cli deploy`. Sessions and any in-flight state on the previous instance are lost.
+2. **Keep the SDK-deployed instance.** Skip `infra single-project` and set the observability env vars on the running instance directly via the `vertexai` client `update` API. You will also need to grant the instance's service account the IAM permissions required to emit telemetry — writing to the logs GCS bucket, BigQuery dataset access, log writer, etc. See `deployment/terraform/single-project/iam.tf` and `telemetry.tf` in your scaffolded project for the full set of bindings the Terraform module would otherwise provision. Terraform-managed env vars are not available in this mode.
 
 ### Reference Files
 
@@ -65,7 +74,7 @@ invocation
 
 | Deployment | Setup |
 |-----------|-------|
-| **Agent Engine** | Automatic — traces are exported to Cloud Trace by default |
+| **Agent Runtime** | Automatic — traces are exported to Cloud Trace by default |
 | **Cloud Run (scaffolded)** | Automatic — `otel_to_cloud=True` in the FastAPI app |
 | **GKE (scaffolded)** | Automatic — `otel_to_cloud=True` in the FastAPI app |
 | **Cloud Run / GKE (manual)** | Configure OpenTelemetry exporter in your app |
@@ -73,7 +82,7 @@ invocation
 
 View traces: **Cloud Console → Trace → Trace explorer**
 
-For detailed setup instructions (Agent Engine CLI/SDK, Cloud Run, custom deployments), fetch `https://adk.dev/integrations/cloud-trace/index.md`.
+For detailed setup instructions (Agent Runtime CLI/SDK, Cloud Run, custom deployments), fetch `https://adk.dev/integrations/cloud-trace/index.md`.
 
 ---
 

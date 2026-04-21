@@ -11,14 +11,14 @@ agents-cli run --url https://my-agent-abc123.run.app --mode a2a "Hello, what can
 # ADK streaming API
 agents-cli run --url https://my-agent-abc123.run.app --mode adk "Hello, what can you do?"
 
-# Agent Engine (auto-detected from URL — works with either mode)
+# Agent Runtime (auto-detected from URL — works with either mode)
 agents-cli run --url https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT/locations/LOCATION/reasoningEngines/ID --mode adk "Hello!"
 
 # Custom auth header (overrides auto-detected credentials)
 agents-cli run --url https://my-agent.run.app --mode a2a -H "Authorization: Bearer my-token" "Hello!"
 ```
 
-The `--mode` flag is required with `--url`: use `adk` for the ADK streaming API (`/run_sse`, or `:streamQuery` for Agent Engine) or `a2a` for the A2A protocol. Agent Engine URLs are detected automatically. Add `-v` for full JSON event payloads.
+The `--mode` flag is required with `--url`: use `adk` for the ADK streaming API (`/run_sse`, or `:streamQuery` for Agent Runtime) or `a2a` for the A2A protocol. Agent Runtime URLs are detected automatically. Add `-v` for full JSON event payloads.
 
 Auth is auto-detected via Google Cloud credentials. Use `--header` / `-H` to override.
 
@@ -26,7 +26,7 @@ For more control (scripting, direct curl), see the target-specific sections belo
 
 ---
 
-## Agent Engine Deployment
+## Agent Runtime Deployment
 
 **Option 1: Testing Notebook**
 ```bash
@@ -39,7 +39,7 @@ import json
 import vertexai
 
 with open("deployment_metadata.json") as f:
-    engine_id = json.load(f)["remote_agent_engine_id"]
+    engine_id = json.load(f)["remote_agent_runtime_id"]
 
 client = vertexai.Client(location="us-east1")
 agent = client.agent_engines.get(name=engine_id)

@@ -13,7 +13,7 @@ If you're working with a coding agent, it will ask you these questions automatic
 1. **What problem will the agent solve?** — Core purpose and capabilities
 2. **External APIs or data sources needed?** — Tools, integrations, auth requirements
 3. **Safety constraints?** — What the agent must NOT do
-4. **Deployment preference?** — Prototype first, or full deployment (Agent Engine, Cloud Run, GKE)?
+4. **Deployment preference?** — Prototype first, or full deployment (Agent Runtime, Cloud Run, GKE)?
 
 Write your answers into a `DESIGN_SPEC.md` at minimum covering: overview, example use cases, tools required, constraints, and success criteria. This becomes the source of truth for everything that follows.
 

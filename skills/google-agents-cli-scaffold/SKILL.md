@@ -12,7 +12,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.5
+  version: 0.0.6
   requires:
     bins:
       - agents-cli
@@ -39,13 +39,26 @@ Use the `agents-cli` CLI to create new ADK agent projects or enhance existing on
 
 | Choice | CLI flag |
 |--------|----------|
-| RAG with vector search | `--agent agentic_rag --datastore vertex_ai_vector_search` |
-| RAG with document search | `--agent agentic_rag --datastore vertex_ai_search` |
+| RAG with vector search | `--agent agentic_rag --datastore agent_platform_vector_search` |
+| RAG with document search | `--agent agentic_rag --datastore agent_platform_search` |
 | A2A protocol | `--agent adk_a2a` |
 | Prototype (no deployment) | `--prototype` |
-| Deployment target | `--deployment-target <agent_engine\|cloud_run\|gke>` |
+| Deployment target | `--deployment-target <agent_runtime\|cloud_run\|gke>` |
 | CI/CD runner | `--cicd-runner <github_actions\|cloud_build>` |
-| Session storage | `--session-type <in_memory\|cloud_sql\|agent_engine>` |
+| Session storage | `--session-type <in_memory\|cloud_sql\|agent_platform_sessions>` |
+
+### Product name mapping
+
+The platform formerly known as "Vertex AI" is now **Gemini Enterprise Agent Platform** (short: **Agent Platform**). Users may refer to products by different names. Map them to the correct CLI values:
+
+| User may say | CLI value |
+|-------------|-----------|
+| Agent Engine, Vertex AI Agent Engine, Agent Runtime | `--deployment-target agent_runtime` |
+| Vertex AI Search, Agent Search | `--datastore agent_platform_search` |
+| Vertex AI Vector Search, Vector Search | `--datastore agent_platform_vector_search` |
+| Agent Engine sessions, Agent Platform Sessions | `--session-type agent_platform_sessions` |
+
+The `vertexai` Python SDK package name is unchanged.
 
 ---
 
@@ -103,7 +116,7 @@ The CLI defaults to **strict programmatic mode** — all required params must be
 
 ```bash
 # Add deployment to an existing prototype (strict programmatic)
-agents-cli scaffold enhance . --deployment-target agent_engine
+agents-cli scaffold enhance . --deployment-target agent_runtime
 
 # Add CI/CD pipeline (ask: GitHub Actions or Cloud Build?)
 agents-cli scaffold enhance . --cicd-runner github_actions
@@ -115,9 +128,9 @@ agents-cli scaffold enhance . --cicd-runner github_actions
 
 | Template | Deployment | Description |
 |----------|------------|-------------|
-| `adk` | Agent Engine, Cloud Run, GKE | Standard ADK agent (default) |
-| `adk_a2a` | Agent Engine, Cloud Run, GKE | Agent-to-agent coordination (A2A protocol) |
-| `agentic_rag` | Agent Engine, Cloud Run, GKE | RAG with data ingestion pipeline |
+| `adk` | Agent Runtime, Cloud Run, GKE | Standard ADK agent (default) |
+| `adk_a2a` | Agent Runtime, Cloud Run, GKE | Agent-to-agent coordination (A2A protocol) |
+| `agentic_rag` | Agent Runtime, Cloud Run, GKE | RAG with data ingestion pipeline |
 
 ---
 
@@ -125,7 +138,7 @@ agents-cli scaffold enhance . --cicd-runner github_actions
 
 | Target | Description |
 |--------|-------------|
-| `agent_engine` | Managed by Google (Vertex AI Agent Engine). Sessions handled automatically. |
+| `agent_runtime` | Managed by Google (Vertex AI Agent Runtime). Sessions handled automatically. |
 | `cloud_run` | Container-based deployment. More control, requires Dockerfile. |
 | `gke` | Container-based on GKE Autopilot. Full Kubernetes control. |
 | `none` | No deployment scaffolding. Code only. |
@@ -141,12 +154,12 @@ agents-cli scaffold create my-agent --agent adk --prototype
 # Step 2: Iterate on the agent code...
 
 # Step 3: Add deployment when ready
-agents-cli scaffold enhance . --deployment-target agent_engine
+agents-cli scaffold enhance . --deployment-target agent_runtime
 ```
 
-### Agent Engine and session_type
+### Agent Runtime and session_type
 
-When using `agent_engine` as the deployment target, Agent Engine manages sessions internally. If your code sets a `session_type`, clear it — Agent Engine overrides it.
+When using `agent_runtime as the deployment target, Agent Runtime manages sessions internally. If your code sets a `session_type`, clear it — Agent Runtime overrides it.
 
 ---
 
@@ -199,7 +212,7 @@ This is useful for:
 - **NEVER `mkdir` before `create`** — the CLI creates the directory; pre-creating it causes enhance mode instead of create mode
 - **NEVER create a Git repo or push to remote without asking** — confirm repo name, public vs private, and whether the user wants it created at all
 - **Always ask before choosing CI/CD runner** — present GitHub Actions and Cloud Build as options, don't default silently
-- **Agent Engine clears session_type** — if deploying to `agent_engine`, remove any `session_type` setting from your code
+- **Agent Runtime clears session_type** — if deploying to `agent_runtime`, remove any `session_type` setting from your code
 - **Start with `--prototype`** for quick iteration — add deployment later with `enhance`
 - **Project names** must be ≤26 characters, lowercase, letters/numbers/hyphens only
 - **NEVER write A2A code from scratch** — the A2A Python API surface (import paths, `AgentCard` schema, `to_a2a()` signature) is non-trivial and changes across versions. Always use `--agent adk_a2a` to scaffold A2A projects.

@@ -68,7 +68,7 @@ export GOOGLE_GENAI_USE_VERTEXAI=TRUE
 
 If you set up Level 2, Option B (Vertex AI), you're already authenticated for deployment — it's the same ADC credential. Beyond model access, ADC also unlocks:
 
-- `agents-cli deploy` — deploy to Agent Engine, Cloud Run, or GKE
+- `agents-cli deploy` — deploy to Agent Runtime, Cloud Run, or GKE
 - `agents-cli infra single-project` / `agents-cli infra cicd` — provision infrastructure and CI/CD with Terraform
 - `agents-cli infra datastore` — provision RAG datastores
 

@@ -22,7 +22,7 @@ Available endpoints vary by project template. Check `app/fast_api_app.py` for th
 |------|--------------|----------|
 | **In-memory** | Default (`session_service_uri = None`) | Local dev only; lost on instance restart |
 | **Cloud SQL** | `--session-type cloud_sql` at scaffold time | Production persistent sessions (Postgres 15, IAM auth) |
-| **Agent Engine** | `session_service_uri = agentengine://{resource_name}` | When using Agent Engine as session backend |
+| **Agent Runtime** | `session_service_uri = agentengine://{resource_name}` | When using Agent Runtime as session backend |
 
 Cloud SQL session infrastructure (instance, database, Cloud SQL Unix socket volume mount) is configured in `deployment/terraform/service.tf`.
 

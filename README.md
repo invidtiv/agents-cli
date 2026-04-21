@@ -64,7 +64,7 @@ See the [full tutorial](https://google.github.io/agents-cli/guide/quickstart-tut
 | `google-agents-cli-adk-code` | ADK Python API — agents, tools, orchestration, callbacks, state |
 | `google-agents-cli-scaffold` | Project scaffolding — `create`, `enhance`, `upgrade` |
 | `google-agents-cli-eval` | Evaluation methodology — metrics, evalsets, LLM-as-judge, trajectory scoring |
-| `google-agents-cli-deploy` | Deployment — [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview), [Cloud Run](https://cloud.google.com/run), [GKE](https://cloud.google.com/kubernetes-engine), CI/CD, secrets |
+| `google-agents-cli-deploy` | Deployment — [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-runtime/overview), [Cloud Run](https://cloud.google.com/run), [GKE](https://cloud.google.com/kubernetes-engine), CI/CD, secrets |
 | `google-agents-cli-publish` | Gemini Enterprise registration |
 | `google-agents-cli-observability` | Observability — Cloud Trace, logging, third-party integrations |
 
@@ -115,7 +115,9 @@ See the [full tutorial](https://google.github.io/agents-cli/guide/quickstart-tut
 ## How it works
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/google/agents-cli/assets/agents-cli-demo.gif" alt="agents-cli demo" width="100%" />
+  <a href="https://youtu.be/ECYKo70pPNc">
+    <img src="https://img.youtube.com/vi/ECYKo70pPNc/maxresdefault.jpg" alt="agents-cli demo video" width="100%" />
+  </a>
 </div>
 
 ---
@@ -147,12 +149,14 @@ Yes. The CLI works standalone — you can run `agents-cli scaffold`, `eval`, `de
 
 We value your input — it helps us improve `agents-cli` for the community.
 
-- **Issues & suggestions:** [raise an issue](https://github.com/google/agents-cli/issues) on GitHub
-- **Share your experience:** reach out at <a href="mailto:agents-cli@google.com">agents-cli@google.com</a>
+- **Bugs & feature requests:** [open an issue](https://github.com/google/agents-cli/issues/new) — 👍 the ones you want prioritized
+- **Share what you built:** we'd love to hear about your projects! Reach out at <a href="mailto:agents-cli@google.com">agents-cli@google.com</a> to share your agent or provide feedback
 
 ## Contributing
 
-Found a bug or have a suggestion? [Open an issue](https://github.com/google/agents-cli/issues). See the [contributing guide](CONTRIBUTING.md) for details.
+The best way to contribute is through feedback: bug reports, feature requests, and ideas shared via [issues](https://github.com/google/agents-cli/issues) to directly shape our roadmap. The CLI is distributed as a pre-built wheel rather than as source in the repository, which lets us iterate quickly while keeping the public interface stable. The code is not obfuscated — you can inspect any release by extracting the `.whl` file (a standard zip archive).
+
+See the [contributing guide](CONTRIBUTING.md) for details.
 
 ## Terms of Service
 

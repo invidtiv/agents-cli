@@ -3,7 +3,7 @@ name: google-agents-cli-deploy
 description: >
   This skill should be used when the user wants to "deploy an agent",
   "deploy my ADK agent", "set up CI/CD", "configure secrets",
-  "troubleshoot a deployment", or needs guidance on Agent Engine,
+  "troubleshoot a deployment", or needs guidance on Agent Runtime,
   Cloud Run, or GKE deployment targets.
   Covers deployment workflows, service accounts, rollback, and production infrastructure.
   Part of the Google ADK (Agent Development Kit) skills suite.
@@ -12,7 +12,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.5
+  version: 0.0.6
   requires:
     bins:
       - agents-cli
@@ -30,7 +30,7 @@ metadata:
 For deeper details, consult these reference files in `references/`:
 
 - **`cloud-run.md`** — Scaling defaults, Dockerfile, session types, networking
-- **`agent-engine.md`** — deploy.py CLI, AdkApp pattern, Terraform resource, deployment metadata, CI/CD differences
+- **`agent-runtime.md`** — deploy.py CLI, AdkApp pattern, Terraform resource, deployment metadata, CI/CD differences
 - **`gke.md`** — GKE Autopilot cluster, Kubernetes manifests, Workload Identity, session types, networking
 - **`terraform-patterns.md`** — Custom infrastructure, IAM, state management, importing resources
 - **`batch-inference.md`** — BigQuery Remote Function trigger; for Pub/Sub / Eventarc see `/google-agents-cli-adk-code`
@@ -45,12 +45,12 @@ For deeper details, consult these reference files in `references/`:
 
 Choose the right deployment target based on your requirements:
 
-| Criteria | Agent Engine | Cloud Run | GKE |
+| Criteria | Agent Runtime | Cloud Run | GKE |
 |----------|-------------|-----------|-----|
 | **Languages** | Python | Python | Python (+ others via custom containers) |
 | **Scaling** | Managed auto-scaling (configurable min/max, concurrency) | Fully configurable (min/max instances, concurrency, CPU allocation) | Full Kubernetes scaling (HPA, VPA, node auto-provisioning) |
 | **Networking** | VPC-SC and PSC supported | Full VPC support, direct VPC egress, IAP, ingress rules | Full Kubernetes networking|
-| **Session state** | Native `VertexAiSessionService` (persistent, managed) | In-memory (dev), Cloud SQL, or Agent Engine session backend | In-memory (dev), Cloud SQL, or Agent Engine session backend |
+| **Session state** | Native `VertexAiSessionService` (persistent, managed) | In-memory (dev), Cloud SQL, or Agent Platform Sessions backend | In-memory (dev), Cloud SQL, or Agent Platform Sessions backend |
 | **Batch/event processing** | Not supported | Native trigger endpoints (Pub/Sub, Eventarc); see `/google-agents-cli-adk-code` | Custom (Kubernetes Jobs, Pub/Sub) |
 | **Cost model** | vCPU-iours + memory-iours (not billed when idle) | Per-instance-second + min instance costs | Node pool costs (always-on or auto-provisioned) |
 | **Setup complexity** | Lower (managed, purpose-built for agents) | Medium (Dockerfile, Terraform, networking) | Higher (Kubernetes expertise required) |
@@ -58,9 +58,11 @@ Choose the right deployment target based on your requirements:
 
 **Ask the user** which deployment target fits their needs. Each is a valid production choice with different trade-offs.
 
-> **Ambient / scheduled / event-driven agents:** Agent Engine does not support Pub/Sub, Eventarc, or Cloud Scheduler triggers. Use **Cloud Run** (recommended) or **GKE** for these workloads. See `/google-agents-cli-adk-code` Section 12 for the `trigger_sources` pattern.
+> **Product name mapping:** "Agent Engine" / "Vertex AI Agent Engine" is now **Agent Runtime**. Use `--deployment-target agent_runtime`.
 
-> **OAuth / user consent agents:** Use **Agent Engine** with Gemini Enterprise for agents that need OAuth 2.0 user consent (e.g., accessing Google Drive, Calendar, or other user-scoped APIs). Cloud Run does not currently support managed OAuth flows. See the `adk-ae-oauth` sample in `/google-agents-cli-workflow` Phase 2.
+> **Ambient / scheduled / event-driven agents:** Agent Runtime does not support Pub/Sub, Eventarc, or Cloud Scheduler triggers. Use **Cloud Run** (recommended) or **GKE** for these workloads. See `/google-agents-cli-adk-code` Section 12 for the `trigger_sources` pattern.
+
+> **OAuth / user consent agents:** Use **Agent Runtime** with Gemini Enterprise for agents that need OAuth 2.0 user consent (e.g., accessing Google Drive, Calendar, or other user-scoped APIs). Cloud Run does not currently support managed OAuth flows. See the `adk-ae-oauth` sample in `/google-agents-cli-workflow` Phase 2.
 
 ---
 
@@ -75,7 +77,7 @@ Choose the right deployment target based on your requirements:
 3. **Wait for explicit approval**
 4. Once approved: `agents-cli deploy`
 
-> **Agent Engine timeout recovery:** Agent Engine deploys can take 5-10 minutes and may exceed command timeouts. If the deploy command is cancelled or times out, the deployment continues server-side. Run `agents-cli deploy --status` to check progress — poll every 60 seconds until it reports completion or failure.
+> **Agent Runtime timeout recovery:** Agent Runtime deploys can take 5-10 minutes and may exceed command timeouts. If the deploy command is cancelled or times out, the deployment continues server-side. Run `agents-cli deploy --status` to check progress — poll every 60 seconds until it reports completion or failure.
 
 **IMPORTANT**: Never run `agents-cli deploy` without explicit human approval.
 
@@ -90,7 +92,7 @@ Choose the right deployment target based on your requirements:
 agents-cli infra single-project
 ```
 
-> **Note:** `agents-cli deploy` doesn't automatically use the Terraform-created `app_sa`. Pass the service account via `agents-cli deploy --service-account SA_EMAIL` or `uv run -m app.app_utils.deploy --service-account SA_EMAIL` for Agent Engine targets.
+> **Note:** `agents-cli deploy` doesn't automatically use the Terraform-created `app_sa`. Pass the service account via `agents-cli deploy --service-account SA_EMAIL` or `uv run -m app.app_utils.deploy --service-account SA_EMAIL` for Agent Runtime targets.
 
 ### Deploy Flag Reference
 
@@ -99,15 +101,15 @@ agents-cli infra single-project
 | `--project` | GCP project ID | All |
 | `--region` | GCP region | All |
 | `--service-account` | Service account email for the deployed agent | All |
-| `--secrets` | Comma-separated `ENV=SECRET` or `ENV=SECRET:VERSION` pairs | Agent Engine |
-| `--update-env-vars` | Comma-separated `KEY=VALUE` environment variables | Agent Engine, Cloud Run |
-| `--agent-identity` | Enable [agent identity](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/agent-identity) (Preview) | Agent Engine |
+| `--secrets` | Comma-separated `ENV=SECRET` or `ENV=SECRET:VERSION` pairs | Agent Runtime |
+| `--update-env-vars` | Comma-separated `KEY=VALUE` environment variables | Agent Runtime, Cloud Run |
+| `--agent-identity` | Enable [agent identity](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/agent-identity) (Preview) | Agent Runtime |
 | `--memory` | Memory limit (default: `4Gi`) | Cloud Run |
 | `--port` | Container port | Cloud Run |
 | `--iap` | Enable Identity-Aware Proxy | Cloud Run |
 | `--image` | Container image URI (skips source build) | Cloud Run, GKE |
-| `--no-wait` | Start deployment and return immediately | Agent Engine, Cloud Run |
-| `--status` | Check the status of a pending `--no-wait` deployment | Agent Engine, Cloud Run |
+| `--no-wait` | Start deployment and return immediately | Agent Runtime, Cloud Run |
+| `--status` | Check the status of a pending `--no-wait` deployment | Agent Runtime, Cloud Run |
 | `--list` | List existing deployments and exit | All |
 | `--dry-run` / `-n` | Print what would be executed without running it | All |
 | `--no-confirm-project` | Skip project confirmation prompt | All |
@@ -132,11 +134,11 @@ For event-driven / ambient agent deployment on Cloud Run, see the [`ambient-expe
 
 ---
 
-## Agent Engine Specifics
+## Agent Runtime Specifics
 
-Agent Engine is a managed Vertex AI service for deploying Python ADK agents. Uses source-based deployment (no Dockerfile) via `deploy.py` and the `AdkApp` class.
+Agent Runtime is a managed Vertex AI service for deploying Python ADK agents. Uses source-based deployment (no Dockerfile) via `deploy.py` and the `AdkApp` class.
 
-> **No `gcloud` CLI exists for Agent Engine.** Deploy via `agents-cli deploy` or `deploy.py`. Query via the Python `vertexai.Client` SDK.
+> **No `gcloud` CLI exists for Agent Runtime.** Deploy via `agents-cli deploy` or `deploy.py`. Query via the Python `vertexai.Client` SDK.
 
 Deployments can take 5-10 minutes. Use `--no-wait` to start a deployment and return immediately, then check on it later with `--status`:
 
@@ -150,7 +152,7 @@ agents-cli deploy --status
 
 When `--status` detects the operation has completed, it writes `deployment_metadata.json` and prints the same success output as a normal deploy.
 
-For detailed infrastructure configuration (deploy.py flags, AdkApp pattern, Terraform resource, deployment metadata, session/artifact services, CI/CD differences), see `references/agent-engine.md`. For ADK docs on Agent Engine deployment, fetch `https://adk.dev/deploy/agent-engine/index.md`.
+For detailed infrastructure configuration (deploy.py flags, AdkApp pattern, Terraform resource, deployment metadata, session/artifact services, CI/CD differences), see `references/agent-runtime.md`. For ADK docs on Agent Runtime deployment, fetch `https://adk.dev/deploy/agent-engine/index.md`.
 
 ---
 
@@ -210,9 +212,9 @@ echo -n "YOUR_API_KEY" | gcloud secrets create MY_SECRET_NAME --data-file=-
 echo -n "NEW_API_KEY" | gcloud secrets versions add MY_SECRET_NAME --data-file=-
 ```
 
-**Grant access:** For Cloud Run, grant `secretmanager.secretAccessor` to `app_sa`. For Agent Engine, grant it to the platform-managed SA (`service-PROJECT_NUMBER@gcp-sa-aiplatform-re.iam.gserviceaccount.com`). For GKE, grant `secretmanager.secretAccessor` to `app_sa`. Access secrets via Kubernetes Secrets or directly via the Secret Manager API with Workload Identity.
+**Grant access:** For Cloud Run, grant `secretmanager.secretAccessor` to `app_sa`. For Agent Runtime, grant it to the platform-managed SA (`service-PROJECT_NUMBER@gcp-sa-aiplatform-re.iam.gserviceaccount.com`). For GKE, grant `secretmanager.secretAccessor` to `app_sa`. Access secrets via Kubernetes Secrets or directly via the Secret Manager API with Workload Identity.
 
-**Pass secrets at deploy time (Agent Engine):**
+**Pass secrets at deploy time (Agent Runtime):**
 ```bash
 agents-cli deploy --secrets "API_KEY=my-api-key,DB_PASS=db-password:2"
 ```
@@ -229,7 +231,7 @@ See the **agents-cli-observability** skill for observability configuration (Clou
 
 ## Testing Your Deployed Agent
 
-The quickest way to test a deployed agent is `agents-cli run --url <service-url> --mode <a2a|adk> "your prompt"` — it handles auth, sessions, and streaming automatically (supports Agent Engine and Cloud Run).
+The quickest way to test a deployed agent is `agents-cli run --url <service-url> --mode <a2a|adk> "your prompt"` — it handles auth, sessions, and streaming automatically (supports Agent Runtime and Cloud Run).
 
 For advanced testing (custom headers, session reuse, scripting, load tests), see `references/testing-deployed-agents.md`.
 
@@ -239,7 +241,7 @@ For advanced testing (custom headers, session reuse, scripting, load tests), see
 
 IAP (Identity-Aware Proxy) secures a Cloud Run service so only authorized Google accounts can access it. Support for IAP deployment via `agents-cli deploy` is planned for a future release.
 
-For Agent Engine with a custom frontend, use a **decoupled deployment** — deploy the frontend separately to Cloud Run or Cloud Storage, connecting to the Agent Engine backend API.
+For Agent Runtime with a custom frontend, use a **decoupled deployment** — deploy the frontend separately to Cloud Run or Cloud Storage, connecting to the Agent Runtime backend API.
 
 For more information on IAP with Cloud Run, see the [Cloud Console IAP settings](https://cloud.google.com/run/docs/securing/identity-aware-proxy-cloud-run#manage_user_or_group_access).
 
@@ -256,7 +258,7 @@ gcloud run services update-traffic SERVICE_NAME \
   --to-revisions=REVISION_NAME=100 --region=REGION
 ```
 
-Agent Engine doesn't support revision-based rollback — fix and redeploy via `agents-cli deploy`.
+Agent Runtime doesn't support revision-based rollback — fix and redeploy via `agents-cli deploy`.
 
 For GKE rollback, use `kubectl rollout undo`:
 ```bash
@@ -287,7 +289,7 @@ For custom infrastructure patterns, consult `references/terraform-patterns.md` f
 | GitHub Actions auth failed | Re-run `terraform apply` in CI/CD terraform dir; verify WIF pool/provider |
 | Cloud Build authorization pending | Use `github_actions` runner instead |
 | Resource already exists | `terraform import` (see `references/terraform-patterns.md`) |
-| Agent Engine deploy timeout / hangs | Deployments take 5-10 min; check if engine was created (see Agent Engine Specifics) |
+| Agent Runtime deploy timeout / hangs | Deployments take 5-10 min; check if engine was created (see Agent Runtime Specifics) |
 | Secret not available | Verify `secretAccessor` granted to `app_sa` (not the default compute SA) |
 | 403 on deploy | Check `deployment/terraform/iam.tf` — `cicd_runner_sa` needs deployment + SA impersonation roles in the target project |
 | 403 when testing Cloud Run | Default is `--no-allow-unauthenticated`; include `Authorization: Bearer $(gcloud auth print-identity-token)` header |
@@ -295,8 +297,8 @@ For custom infrastructure patterns, consult `references/terraform-patterns.md` f
 | Cloud Run 503 errors | Check resource limits (memory/CPU), increase `max_instance_count`, or check container crash logs |
 | 403 right after granting IAM role | IAM propagation is not instant — wait a couple of minutes before retrying. Don't keep re-granting the same role |
 | Resource seems missing but Terraform created it | Run `terraform state list` to check what Terraform actually manages. Resources created via `null_resource` + `local-exec` (e.g., BQ linked datasets) won't appear in `gcloud` CLI output |
-| Deployment failed or agent not responding | Check Cloud Logging: `gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=SERVICE" --project=PROJECT --limit=50 --format="table(timestamp,severity,textPayload)"` for Cloud Run, or `gcloud logging read "resource.type=aiplatform.googleapis.com/ReasoningEngine" --project=PROJECT --limit=50` for Agent Engine |
-| Agent returns errors after deploy | Open Cloud Logging in Console → filter by service name (Cloud Run) or reasoning engine resource (Agent Engine) → look for Python tracebacks or permission errors in recent log entries |
+| Deployment failed or agent not responding | Check Cloud Logging: `gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=SERVICE" --project=PROJECT --limit=50 --format="table(timestamp,severity,textPayload)"` for Cloud Run, or `gcloud logging read "resource.type=aiplatform.googleapis.com/ReasoningEngine" --project=PROJECT --limit=50` for Agent Runtime |
+| Agent returns errors after deploy | Open Cloud Logging in Console → filter by service name (Cloud Run) or reasoning engine resource (Agent Runtime) → look for Python tracebacks or permission errors in recent log entries |
 
 ---
 

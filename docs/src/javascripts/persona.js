@@ -28,3 +28,21 @@ document.addEventListener("click", function (e) {
   document.getElementById("panel-" + persona).classList.add("active");
   btn.classList.add("active");
 });
+
+// Make GitHub repo link open in a new tab
+document.addEventListener("DOMContentLoaded", function() {
+  function setRepoLinkTarget() {
+    var repoLink = document.querySelector('a[href*="github.com"]');
+    if (repoLink) {
+      repoLink.setAttribute("target", "_blank");
+      repoLink.setAttribute("rel", "noopener noreferrer");
+    }
+  }
+
+  setRepoLinkTarget();
+
+  // Re-apply on instant navigation (Material theme feature)
+  document$.subscribe(function() {
+    setRepoLinkTarget();
+  });
+});

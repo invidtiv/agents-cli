@@ -77,7 +77,7 @@ agents-cli run "Please help me understand the deployment options available for m
 Output:
 
 ```
-Deploy options: Agent Engine, Cloud Run, GKE. Pick one. Ship.
+Deploy options: Agent Runtime, Cloud Run, GKE. Pick one. Ship.
 ```
 
 ---

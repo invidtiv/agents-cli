@@ -15,7 +15,7 @@ Agents CLI bundles **7 skills** that give your coding agent deep knowledge acros
 | `google-agents-cli-adk-code` | ADK Python API — agents, tools, orchestration, callbacks |
 | `google-agents-cli-scaffold` | Project scaffolding — `create`, `enhance`, `upgrade` |
 | `google-agents-cli-eval` | Evaluation — metrics, evalsets, LLM-as-judge |
-| `google-agents-cli-deploy` | Deployment — Agent Engine, Cloud Run, GKE, CI/CD |
+| `google-agents-cli-deploy` | Deployment — Agent Runtime, Cloud Run, GKE, CI/CD |
 | `google-agents-cli-publish` | Gemini Enterprise registration |
 | `google-agents-cli-observability` | Cloud Trace, logging, third-party integrations |
 
@@ -194,6 +194,14 @@ For a full walkthrough, see the [Manual Workflow Tutorial](hands-on-tutorial.md)
 
 ---
 
+## Demo
+
+<div align="center">
+  <iframe width="100%" height="450" src="https://www.youtube.com/embed/ECYKo70pPNc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+---
+
 ## Next Steps
 
 - [Tutorial: Build Your First Agent](quickstart-tutorial.md) — build, evaluate, and deploy with your coding agent
@@ -208,3 +216,6 @@ For a full walkthrough, see the [Manual Workflow Tutorial](hands-on-tutorial.md)
 
 !!! tip "Coming from Agent Starter Pack?"
     See the [migration guide](../reference/from-agent-starter-pack.md).
+
+!!! note "Share what you build"
+    Built something interesting with Agents CLI? We'd love to hear about it! Share your project at [agents-cli@google.com](mailto:agents-cli@google.com).

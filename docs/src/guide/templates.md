@@ -33,15 +33,15 @@ agents-cli create my-agent --agent adk_a2a
 A document Q&A agent with a built-in RAG (Retrieval-Augmented Generation) pipeline. Includes data ingestion infrastructure for indexing documents into a vector store and retrieving them at query time.
 
 ```bash
-agents-cli create my-agent --agent agentic_rag --datastore vertex_ai_search
+agents-cli create my-agent --agent agentic_rag --datastore agent_platform_search
 ```
 
 During project creation, choose a datastore backend:
 
 | Datastore | Description |
 |-----------|-------------|
-| `vertex_ai_search` | GCS Data Connector with built-in scheduling and ranking |
-| `vertex_ai_vector_search` | Kubeflow pipeline with auto-embedding |
+| `agent_platform_search` | GCS Data Connector with built-in scheduling and ranking |
+| `agent_platform_vector_search` | Kubeflow pipeline with auto-embedding |
 
 After creation, provision the datastore and ingest data:
 

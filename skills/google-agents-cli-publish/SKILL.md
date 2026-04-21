@@ -12,7 +12,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.5
+  version: 0.0.6
   requires:
     bins:
       - agents-cli
@@ -21,13 +21,13 @@ metadata:
 
 # Gemini Enterprise Registration
 
-> **Requires:** A deployed agent. For Agent Engine, `deployment_metadata.json` (created by `agents-cli deploy`) enables auto-detection. For Cloud Run or GKE, provide the agent card URL and flags directly.
+> **Requires:** A deployed agent. For Agent Runtime, `deployment_metadata.json` (created by `agents-cli deploy`) enables auto-detection. For Cloud Run or GKE, provide the agent card URL and flags directly.
 
 ## Prerequisites
 
 1. **Agent must be deployed** — the agent must be running and reachable
 2. **Gemini Enterprise app must exist** — Create one in Google Cloud Console → Gemini Enterprise → Apps before registering
-3. **`deployment_metadata.json`** (Agent Engine only) — Created automatically by `agents-cli deploy`; contains the agent engine ID, deployment target, and A2A flag
+3. **`deployment_metadata.json`** (Agent Runtime only) — Created automatically by `agents-cli deploy`; contains the agent runtime ID, deployment target, and A2A flag
 
 ## Required Permissions for A2A on Cloud Run
 
@@ -39,11 +39,11 @@ metadata:
 
 ### ADK Registration (default)
 
-For standard ADK agents deployed to Agent Engine. The agent is registered directly via its reasoning engine resource name.
+For standard ADK agents deployed to Agent Runtime. The agent is registered directly via its reasoning engine resource name.
 
 ```bash
 agents-cli publish gemini-enterprise \
-  --agent-engine-id projects/123456/locations/us-east1/reasoningEngines/789 \
+  --agent-runtime-id projects/123456/locations/us-east1/reasoningEngines/789 \
   --gemini-enterprise-app-id projects/123456/locations/global/collections/default_collection/engines/my-app \
   --display-name "My Agent" \
   --description "Handles customer queries" \
@@ -62,7 +62,7 @@ agents-cli publish gemini-enterprise \
   --gemini-enterprise-app-id projects/123456/locations/global/collections/default_collection/engines/my-app \
   --display-name "My A2A Agent"
 
-# A2A on Agent Engine (card URL is auto-constructed from metadata)
+# A2A on Agent Runtime (card URL is auto-constructed from metadata)
 agents-cli publish gemini-enterprise \
   --registration-type a2a \
   --gemini-enterprise-app-id projects/123456/locations/global/collections/default_collection/engines/my-app
@@ -78,7 +78,7 @@ The command is non-interactive by default — pass all required values via flags
 
 ```bash
 agents-cli publish gemini-enterprise \
-  --agent-engine-id "$AGENT_ENGINE_ID" \
+  --agent-runtime-id "$AGENT_RUNTIME_ID" \
   --gemini-enterprise-app-id "$GEMINI_ENTERPRISE_APP_ID" \
   --display-name "Production Agent" \
   --registration-type adk
@@ -89,7 +89,7 @@ agents-cli publish gemini-enterprise \
 Every flag has an env var alternative:
 
 ```bash
-export AGENT_ENGINE_ID="projects/123456/locations/us-east1/reasoningEngines/789"
+export AGENT_RUNTIME_ID="projects/123456/locations/us-east1/reasoningEngines/789"
 export GEMINI_ENTERPRISE_APP_ID="projects/123456/locations/global/collections/default_collection/engines/my-app"
 export GEMINI_DISPLAY_NAME="Production Agent"
 export GEMINI_DESCRIPTION="Handles customer queries"
@@ -101,7 +101,7 @@ agents-cli publish gemini-enterprise
 
 ## Interactive Mode (`--interactive`)
 
-Pass `--interactive` (or `-i`) to be guided through any missing values with interactive prompts. The command will list available Gemini Enterprise apps, offer to auto-detect the agent engine ID from metadata, and prompt for display name and description.
+Pass `--interactive` (or `-i`) to be guided through any missing values with interactive prompts. The command will list available Gemini Enterprise apps, offer to auto-detect the agent runtime ID from metadata, and prompt for display name and description.
 
 ```bash
 agents-cli publish gemini-enterprise --interactive
@@ -113,14 +113,14 @@ agents-cli publish gemini-enterprise --interactive
 
 | Flag | Env Var | Description |
 |------|---------|-------------|
-| `--agent-engine-id` | `AGENT_ENGINE_ID` | Agent Engine resource name (auto-detected from `deployment_metadata.json`) |
+| `--agent-runtime-id` | `AGENT_RUNTIME_ID` | Agent Runtime resource name (auto-detected from `deployment_metadata.json`) |
 | `--gemini-enterprise-app-id` | `ID` or `GEMINI_ENTERPRISE_APP_ID` | Gemini Enterprise app full resource name |
 | `--display-name` | `GEMINI_DISPLAY_NAME` | Display name in Gemini Enterprise |
 | `--description` | `GEMINI_DESCRIPTION` | Agent description |
 | `--tool-description` | `GEMINI_TOOL_DESCRIPTION` | Tool description (ADK mode only, defaults to description) |
 | `--registration-type` | `REGISTRATION_TYPE` | `adk` or `a2a` (auto-detected from metadata if not set) |
 | `--agent-card-url` | `AGENT_CARD_URL` | Agent card URL for A2A registration |
-| `--deployment-target` | `DEPLOYMENT_TARGET` | `agent_engine`, `cloud_run`, or `gke` (affects A2A auth method) |
+| `--deployment-target` | `DEPLOYMENT_TARGET` | `agent_runtime`, `cloud_run`, or `gke` (affects A2A auth method) |
 | `--project-id` | `GOOGLE_CLOUD_PROJECT` | GCP project ID for billing |
 | `--project-number` | `PROJECT_NUMBER` | GCP project number (used for Gemini Enterprise lookup) |
 | `--authorization-id` | `GEMINI_AUTHORIZATION_ID` | OAuth authorization resource name |
@@ -133,12 +133,12 @@ agents-cli publish gemini-enterprise --interactive
 
 When `deployment_metadata.json` exists, the command automatically:
 
-- Reads the **agent engine ID** (`remote_agent_engine_id`)
+- Reads the **agent runtime ID** (`remote_agent_runtime_id`)
 - Detects the **registration type** (`is_a2a` flag)
-- Constructs the **agent card URL** for A2A agents on Agent Engine
+- Constructs the **agent card URL** for A2A agents on Agent Runtime
 - Determines the **deployment target** for authentication
 
-This means that for the simplest case (ADK agent on Agent Engine), you only need to provide the Gemini Enterprise app ID:
+This means that for the simplest case (ADK agent on Agent Runtime), you only need to provide the Gemini Enterprise app ID:
 
 ```bash
 agents-cli publish gemini-enterprise \
@@ -149,7 +149,7 @@ agents-cli publish gemini-enterprise \
 
 ## SDK Compatibility
 
-Agent Engine deployments may encounter "Session not found" errors with `google-cloud-aiplatform` versions <= 1.128.0. In interactive mode (`--interactive`), the command checks the SDK version from `uv.lock` and offers to upgrade. In programmatic mode, ensure your SDK is up to date before registering.
+Agent Runtime deployments may encounter "Session not found" errors with `google-cloud-aiplatform` versions <= 1.128.0. In interactive mode (`--interactive`), the command checks the SDK version from `uv.lock` and offers to upgrade. In programmatic mode, ensure your SDK is up to date before registering.
 
 ---
 

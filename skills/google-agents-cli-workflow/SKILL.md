@@ -12,7 +12,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.5
+  version: 0.0.6
   requires:
     bins:
       - agents-cli
@@ -25,8 +25,8 @@ metadata:
 
 **agents-cli** is a CLI and skills toolkit for building, evaluating, and deploying agents on Google Cloud using the [Agent Development Kit (ADK)](https://adk.dev/). It works with any coding agent — Gemini CLI, Claude Code, Codex, or others. Install with `uvx google-agents-cli setup`.
 
-> Requires: google-agents-cli ~= 0.0.5
-> If version is behind, run: uv tool install "google-agents-cli~=0.0.5"
+> Requires: google-agents-cli ~= 0.0.6
+> If version is behind, run: uv tool install "google-agents-cli~=0.0.6"
 > Check version: agents-cli info
 > [Install uv](https://docs.astral.sh/uv/getting-started/installation/index.md) first if needed.
 
@@ -58,6 +58,19 @@ uv tool install google-agents-cli
 
 Install `uv` following the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/index.md).
 
+### Product name mapping
+
+The platform formerly known as "Vertex AI" is now **Gemini Enterprise Agent Platform** (short: **Agent Platform**). Users may refer to products by different names. Map them to the correct CLI values:
+
+| User may say | CLI value |
+|-------------|-----------|
+| Agent Engine, Vertex AI Agent Engine, Agent Runtime | `--deployment-target agent_runtime` |
+| Vertex AI Search, Agent Search | `--datastore agent_platform_search` |
+| Vertex AI Vector Search, Vector Search | `--datastore agent_platform_vector_search` |
+| Agent Engine sessions, Agent Platform Sessions | `--session-type agent_platform_sessions` |
+
+The `vertexai` Python SDK package name is unchanged.
+
 ---
 
 ## Phase 0: Understand
@@ -73,15 +86,15 @@ Do NOT proceed to planning, scaffolding, or coding. Ask the user the questions b
 1. **What problem will the agent solve?** — Core purpose and capabilities
 2. **External APIs or data sources needed?** — Tools, integrations, auth requirements
 3. **Safety constraints?** — What the agent must NOT do, guardrails
-4. **Deployment preference?** — Prototype first (recommended) or full deployment? If deploying: Agent Engine, Cloud Run, or GKE?
+4. **Deployment preference?** — Prototype first (recommended) or full deployment? If deploying: Agent Runtime, Cloud Run, or GKE?
 
 **Ask based on context:**
 
-- If **retrieval or search over data** mentioned (RAG, semantic search, vector search, embeddings, similarity search, data ingestion) → **Datastore?** Options: `vertex_ai_vector_search` (embeddings, similarity search) or `vertex_ai_search` (document search, search engine).
+- If **retrieval or search over data** mentioned (RAG, semantic search, vector search, embeddings, similarity search, data ingestion) → **Datastore?** Options: `agent_platform_vector_search` (embeddings, similarity search) or `agent_platform_search` (document search, search engine).
 - If agent should be **available to other agents** → **A2A protocol?** Enables the agent as an A2A-compatible service.
 - If **full deployment** chosen → **CI/CD runner?** GitHub Actions (default) or Google Cloud Build?
 - If agent should **remember user preferences or facts across sessions** → **Memory Bank?** Long-term memory across conversations. See `/google-agents-cli-adk-code`.
-- If **Cloud Run** or **GKE** chosen → **Session storage?** In-memory (default), Cloud SQL (persistent), or Agent Engine (managed).
+- If **Cloud Run** or **GKE** chosen → **Session storage?** In-memory (default), Cloud SQL (persistent), or Agent Platform Sessions (managed).
 - If **deployment with CI/CD** chosen → **Git repository?** Does one already exist, or should one be created? If creating, public or private?
 
 Once you have the user's answers, write a `DESIGN_SPEC.md` with the user's approval. See `/google-agents-cli-scaffold` for how these choices map to CLI flags. At minimum include these sections — expand with more detail if the user wants a thorough spec:
@@ -126,8 +139,8 @@ cd /tmp/adk-samples && git sparse-checkout add python/agents/<sample-name>
 - **`ambient-expense-agent`** — Agent that runs on a schedule or reacts to events, with no interactive user.
   Keywords: scheduled, cron, daily, pubsub, event-driven, alerts, email, ambient
   Key files: `expense_agent/fast_api_app.py`, `expense_agent/agent.py`, `expense_agent/config.py`, `terraform/`
-- **`adk-ae-oauth`** — Agent with OAuth 2.0 user consent, deployed to Agent Engine with Gemini Enterprise.
-  Keywords: OAuth, authentication, user consent, Google Drive, Agent Engine, Gemini Enterprise
+- **`adk-ae-oauth`** — Agent with OAuth 2.0 user consent, deployed to Agent Runtime with Gemini Enterprise.
+  Keywords: OAuth, authentication, user consent, Google Drive, Agent Runtime, Gemini Enterprise
   Key files: `README.md`, `adk_ae_oauth/tools.py`, `adk_ae_oauth/auths.py`
 - **`genmedia-for-commerce`** — Full-stack agent with React UI, MCP tools, media/image handling, and Gemini Enterprise registration.
   Keywords: MCP, media, video generation, Veo, virtual try-on, retail, full-stack, React, Gemini Enterprise
@@ -141,9 +154,9 @@ cd /tmp/adk-samples && git sparse-checkout add python/agents/<sample-name>
 - **`data-science`** — Agent that executes code in a managed sandbox for data analysis.
   Keywords: SQL, BigQuery, code execution, sandbox
   Key files: `data_science/sub_agents/analytics/agent.py`
-- **`memory-bank`** — Conversational agent with cross-session memory via Memory Bank (Cloud Run and Agent Engine).
+- **`memory-bank`** — Conversational agent with cross-session memory via Memory Bank (Cloud Run and Agent Runtime).
   Keywords: memory, cross-session, recall, context, remember, Memory Bank
-  Key files: `app/agent.py`, `app/agent_engine_app.py`, `app/fast_api_app.py`
+  Key files: `app/agent.py`, `app/agent_runtime_app.py`, `app/fast_api_app.py`
 
 If no sample matches, proceed to Phase 2. But first — are you sure? Re-read the user's request and compare it against the keywords above. Skipping a matching sample means rebuilding patterns that already exist.
 
@@ -209,7 +222,7 @@ Once evaluation thresholds are met:
    ```bash
    agents-cli scaffold enhance . --deployment-target <target>
    ```
-   See `/google-agents-cli-deploy` for the deployment target decision matrix (Agent Engine vs Cloud Run vs GKE).
+   See `/google-agents-cli-deploy` for the deployment target decision matrix (Agent Runtime vs Cloud Run vs GKE).
 3. Deploy when ready: `agents-cli deploy`
 
 **IMPORTANT**: Never deploy without explicit human approval.

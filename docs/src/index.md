@@ -15,18 +15,18 @@ hide:
 <div class="hero-grid">
   <div class="hero-content">
     <p class="headline"><strong><code>agents-cli</code></strong><br><span class="headline-sub">in Agent Platform</span></p>
-    <p class="tagline">Skills and CLI for building agents on Google Cloud.</p>
+    <p class="tagline">CLI and skills for building agents on Google Cloud.</p>
     <div class="home-cta">
       <a href="guide/getting-started/" class="cta-primary">Get Started &rarr;</a>
-      <a href="https://github.com/google/agents-cli" class="cta-secondary">View on GitHub</a>
+      <a href="https://github.com/google/agents-cli" class="cta-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
     </div>
     <div class="works-with">
       <p class="works-with-text">Works with your coding agent</p>
       <div class="works-with-logos">
-        <a href="https://github.com/google-gemini/gemini-cli" title="Gemini CLI"><img src="assets/logos/gemini.png" alt="Gemini CLI"></a>
-        <a href="https://docs.anthropic.com/en/docs/claude-code" title="Claude Code"><img src="assets/logos/claude.png" alt="Claude Code"></a>
-        <a href="https://github.com/openai/codex" title="Codex"><img src="assets/logos/openai.svg" alt="Codex"></a>
-        <a href="https://antigravity.google/" title="Antigravity"><img src="assets/logos/antigravity.png" alt="Antigravity"></a>
+        <a href="https://github.com/google-gemini/gemini-cli" title="Gemini CLI" target="_blank" rel="noopener noreferrer"><img src="assets/logos/gemini.png" alt="Gemini CLI"></a>
+        <a href="https://docs.anthropic.com/en/docs/claude-code" title="Claude Code" target="_blank" rel="noopener noreferrer"><img src="assets/logos/claude.png" alt="Claude Code"></a>
+        <a href="https://github.com/openai/codex" title="Codex" target="_blank" rel="noopener noreferrer"><img src="assets/logos/openai.svg" alt="Codex"></a>
+        <a href="https://antigravity.google/" title="Antigravity" target="_blank" rel="noopener noreferrer"><img src="assets/logos/antigravity.png" alt="Antigravity"></a>
         <span class="works-with-more">& more</span>
       </div>
     </div>
@@ -88,4 +88,3 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 </script>
-

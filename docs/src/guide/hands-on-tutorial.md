@@ -228,7 +228,7 @@ agents-cli deploy --status
 ```
 
 !!! note
-    Deployment requires [Google Cloud credentials](authentication.md#option-b-google-cloud-vertex-ai). See the [Deployment Guide](deployment.md) for Agent Engine, GKE, and other options.
+    Deployment requires [Google Cloud credentials](authentication.md#option-b-google-cloud-vertex-ai). See the [Deployment Guide](deployment.md) for Agent Runtime, GKE, and other options.
 
 ---
 
@@ -268,5 +268,5 @@ See the [Observability Guide](observability/index.md) for verification steps, fu
 
 - [ADK Custom Tools](https://google.github.io/adk-docs/tools/) — more tool patterns and advanced usage
 - [Evaluation Guide](evaluation.md) — write better evals, understand metrics
-- [Deployment Guide](deployment.md) — Agent Engine, GKE, secrets, and CI/CD
+- [Deployment Guide](deployment.md) — Agent Runtime, GKE, secrets, and CI/CD
 - [Observability Guide](observability/index.md) — BigQuery Agent Analytics, third-party integrations

@@ -375,7 +375,7 @@ from google.adk.code_executors import BuiltInCodeExecutor
 # Google Search grounding
 agent = Agent(tools=[google_search], ...)
 
-# Vertex AI Search grounding (your own data)
+# Agent Platform Search grounding (your own data)
 agent = Agent(tools=[VertexAiSearchTool(data_store_id="projects/P/locations/L/collections/default_collection/dataStores/DS")], ...)
 
 # Web page loading
@@ -745,7 +745,7 @@ remote = RemoteA2aAgent(
 
 Ambient agents process events (Pub/Sub, Eventarc, schedules) autonomously. ADK provides built-in trigger endpoints that handle payload decoding, session creation, concurrency, and retries.
 
-> **Deployment:** Trigger endpoints require **Cloud Run** or **GKE**. Agent Engine does not support event-driven or scheduled triggers.
+> **Deployment:** Trigger endpoints require **Cloud Run** or **GKE**. Agent Runtime does not support event-driven or scheduled triggers.
 
 ```python
 from google.adk.cli.fast_api import get_fast_api_app

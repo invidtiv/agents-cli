@@ -140,7 +140,7 @@ Long-running workflows or multi-agent coordination. Requires dedicated infrastru
 
 *Advanced · `agentic_rag`*
 
-Index a target codebase of approximately 500,000 lines. Analyze technical debt, security vulnerabilities, license compliance, and deployment complexity. Produce a risk report with line numbers, dependency graphs, and CVE references. Multi-day analysis benefits from Agent Engine's extended sessions and checkpointing.
+Index a target codebase of approximately 500,000 lines. Analyze technical debt, security vulnerabilities, license compliance, and deployment complexity. Produce a risk report with line numbers, dependency graphs, and CVE references. Multi-day analysis benefits from Agent Runtime's extended sessions and checkpointing.
 
 ```
 Build a due-diligence agent that indexes a target codebase, runs security and license scans, and produces a risk report with citations.
