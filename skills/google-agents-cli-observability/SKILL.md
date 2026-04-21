@@ -13,7 +13,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.0.6
+  version: 0.1.0
   requires:
     bins:
       - agents-cli
@@ -149,7 +149,7 @@ For detailed documentation beyond what this skill covers, fetch these pages:
 | AgentOps | `https://adk.dev/integrations/agentops/index.md` |
 | Arize AX | `https://adk.dev/integrations/arize-ax/index.md` |
 | Phoenix (Arize) | `https://adk.dev/integrations/phoenix/index.md` |
-| MLflow tracing | `https://adk.dev/integrations/mlflow/index.md` |
+| MLflow tracing | `https://adk.dev/integrations/mlflow-tracing/index.md` |
 | Monocle | `https://adk.dev/integrations/monocle/index.md` |
 | W&B Weave | `https://adk.dev/integrations/weave/index.md` |
 | Freeplay | `https://adk.dev/integrations/freeplay/index.md` |
