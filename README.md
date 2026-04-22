@@ -64,7 +64,7 @@ See the [full tutorial](https://google.github.io/agents-cli/guide/quickstart-tut
 | `google-agents-cli-adk-code` | ADK Python API — agents, tools, orchestration, callbacks, state |
 | `google-agents-cli-scaffold` | Project scaffolding — `create`, `enhance`, `upgrade` |
 | `google-agents-cli-eval` | Evaluation methodology — metrics, evalsets, LLM-as-judge, trajectory scoring |
-| `google-agents-cli-deploy` | Deployment — [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-runtime/overview), [Cloud Run](https://cloud.google.com/run), [GKE](https://cloud.google.com/kubernetes-engine), CI/CD, secrets |
+| `google-agents-cli-deploy` | Deployment — [Agent Runtime](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale), [Cloud Run](https://cloud.google.com/run), [GKE](https://cloud.google.com/kubernetes-engine), CI/CD, secrets |
 | `google-agents-cli-publish` | Gemini Enterprise registration |
 | `google-agents-cli-observability` | Observability — Cloud Trace, logging, third-party integrations |
 
@@ -161,3 +161,12 @@ See the [contributing guide](CONTRIBUTING.md) for details.
 ## Terms of Service
 
 `agents-cli` leverages Google Cloud APIs. When you deploy agents, you'll be deploying resources in your own Google Cloud project and will be responsible for those resources. Please review the [Google Cloud Service Terms](https://cloud.google.com/terms/service-terms) for details.
+
+## Preview
+
+This feature is subject to the "Pre-GA Offerings Terms" in the General Service
+Terms section of the
+[Service Specific Terms](https://cloud.google.com/terms/service-terms#1).
+Pre-GA features are available "as is" and might have limited support. For more
+information, see the
+[launch stage descriptions](https://cloud.google.com/products?hl=en#product-launch-stages).

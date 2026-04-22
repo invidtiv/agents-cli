@@ -12,7 +12,7 @@ description: >
 metadata:
   author: Google
   license: Apache-2.0
-  version: 0.1.0
+  version: 0.1.1
   requires:
     bins:
       - agents-cli
@@ -103,7 +103,7 @@ agents-cli infra single-project
 | `--service-account` | Service account email for the deployed agent | All |
 | `--secrets` | Comma-separated `ENV=SECRET` or `ENV=SECRET:VERSION` pairs | Agent Runtime |
 | `--update-env-vars` | Comma-separated `KEY=VALUE` environment variables | Agent Runtime, Cloud Run |
-| `--agent-identity` | Enable [agent identity](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/agent-identity) (Preview) | Agent Runtime |
+| `--agent-identity` | Enable [agent identity](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/agent-identity) (Preview) | Agent Runtime |
 | `--memory` | Memory limit (default: `4Gi`) | Cloud Run |
 | `--port` | Container port | Cloud Run |
 | `--iap` | Enable Identity-Aware Proxy | Cloud Run |
@@ -152,7 +152,7 @@ agents-cli deploy --status
 
 When `--status` detects the operation has completed, it writes `deployment_metadata.json` and prints the same success output as a normal deploy.
 
-For detailed infrastructure configuration (deploy.py flags, AdkApp pattern, Terraform resource, deployment metadata, session/artifact services, CI/CD differences), see `references/agent-runtime.md`. For ADK docs on Agent Runtime deployment, fetch `https://adk.dev/deploy/agent-engine/index.md`.
+For detailed infrastructure configuration (deploy.py flags, AdkApp pattern, Terraform resource, deployment metadata, session/artifact services, CI/CD differences), see `references/agent-runtime.md`. For ADK docs on Agent Runtime deployment, fetch `https://adk.dev/deploy/agent-runtime/index.md`.
 
 ---
 
