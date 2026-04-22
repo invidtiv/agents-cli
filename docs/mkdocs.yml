@@ -62,8 +62,7 @@ plugins:
   - search
 
 markdown_extensions:
-  # TODO(b/503795717): re-enable once google-agents-cli is published to PyPI
-  # - mkdocs-click
+  - mkdocs-click
   - admonition
   - attr_list
   - md_in_html
